@@ -123,7 +123,7 @@ using namespace std;
     //顶部视图移出
     if (_visibleRange.length > 0) {
         CGPoint topOutPoint = (_bottomDrawPointVector[_visibleRange.location]);
-        CGFloat topOutHeight = (topOutPoint).y+[[_resHeightDic objectForKey:[NSNumber numberWithInt:_visibleRange.location]] floatValue];
+        CGFloat topOutHeight = (topOutPoint).y+[[_resHeightDic objectForKey:[NSNumber numberWithUnsignedInteger:_visibleRange.location]] floatValue];
         if (topOutHeight < TopLineHeight) {
             ZBFlowView *flowView = [_visibleViews firstObject];
             [self recycleFlowViewIntoReusableQueue:flowView];
@@ -143,7 +143,7 @@ using namespace std;
         if (topEntity.point.y>TopLineHeight) {//循环添加到移入点
             while (_visibleRange.location>= topEntity.index+1) {//be caution location is a non-negtive
                 CGPoint topInPoint = _bottomDrawPointVector[_visibleRange.location-1];
-                UIView *view = [self drawView:topInPoint index:_visibleRange.location-1];
+                UIView *view = [self drawView:topInPoint index:(int)_visibleRange.location-1];
                 [_visibleViews insertObject:view atIndex:0];
                 _visibleRange.location--;
                 _visibleRange.length++;
@@ -154,11 +154,11 @@ using namespace std;
     }
     
     //底部视图移入
-    if (_visibleRange.location+_visibleRange.length <= _bottomDrawPointVector.size()-1) {
+    if ((int)(_visibleRange.location+_visibleRange.length) <= (int)_bottomDrawPointVector.size()-1) {
         CGPoint bottomInPoint = _bottomDrawPointVector[_visibleRange.location+_visibleRange.length];
         CGFloat bottomInHeight = (bottomInPoint).y;
         if (bottomInHeight<BottomLineHeight) {
-            UIView *view = [self drawView:bottomInPoint index:_visibleRange.location+_visibleRange.length];
+            UIView *view = [self drawView:bottomInPoint index:(int)(_visibleRange.location+_visibleRange.length)];
             [_visibleViews addObject:view];
             _visibleRange.length++;
             return;
@@ -296,7 +296,7 @@ using namespace std;
     //配置节点
     NSAssert([self.waterDataSource respondsToSelector:@selector(numberOfFlowViewInWaterView:)]
              ,@"numberOfFlowViewInWaterView must be implement");
-    int numbers = [self.waterDataSource numberOfFlowViewInWaterView:self];
+    int numbers = (int)[self.waterDataSource numberOfFlowViewInWaterView:self];
     for (int i=0; i<numbers; i++) {
         NSAssert([self.waterDataSource respondsToSelector:@selector(waterView:heightOfFlowViewAtIndex:)]
                  ,@"waterView:heightOfFlowViewAtIndex: must be implement");
