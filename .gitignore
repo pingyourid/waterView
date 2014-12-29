@@ -1,0 +1,8 @@
+#过滤编译目录
+Build/
+DerivedData/
+*.pbxuser
+*.xcuserstate
+xcuserdata
+*.xccheckout
+
